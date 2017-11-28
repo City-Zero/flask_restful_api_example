@@ -1,0 +1,11 @@
+#flask restful api示例
+##数据库默认用户 root:root
+##api解释
+###GET /api/user
+获取用户数据。需要登陆验证
+###POST /api/user
+创建新用户
+###GET /api/token
+用户名密码生成token
+##环境
+fedora24 python3.5
