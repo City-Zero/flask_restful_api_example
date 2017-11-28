@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+<a href="/static/sigin.html">sigin</a>
+<br>
+<a href="/static/login.html">login</a>
+<br>
+<button onclick="get_user()">get_user_message</button>
+</body>
+<script>
+    function getCookie(name)
+    {
+    let arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+        return unescape(arr[2]);
+    else
+        return null;
+    }
+
+    function get_user() {
+        let token = getCookie('token');
+        let url = '/api/user';
+        let cook = document.cookie.split(';');
+        if(token != null){
+            //发送token
+            let xhr=null;
+            if(window.XMLHttpRequest){
+                xhr=new XMLHttpRequest();
+            }else{
+                xhr=new ActiveXObject("Microft.XMLHttp");
+            }
+            xhr.open('GET','/api/user');
+            xhr.onreadystatechange = function () {
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200) {
+                        alert(JSON.stringify(JSON.parse(xhr.responseText).message));
+                    }
+                    else{
+                        //token过期
+                        window.location.href = '/static/login.html';
+                    }
+                }
+            };
+            xhr.setRequestHeader("Authorization","Basic "+window.btoa(token+":"));
+            xhr.send();
+        }else{
+            //登陆获取cookie
+            window.location.href = '/static/login.html';
+        }
+    }
+</script>
+</html>

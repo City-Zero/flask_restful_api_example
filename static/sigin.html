@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sigin</title>
+</head>
+<body>
+用户注册测试。输入用户名密码，ajxa用POST发送json到/api/user。
+<form>
+    <input type="text" name="username" id="username">
+    <input type="password" name="password" id="password">
+    <input type="button" onclick="new_user()">
+</form>
+</body>
+<script>
+    function new_user() {
+        let xhr=null;
+        if(window.XMLHttpRequest){
+            xhr=new XMLHttpRequest();
+        }else{
+            xhr=new ActiveXObject("Microft.XMLHttp");
+        }
+        let user = document.getElementById('username').value;
+        let pass = document.getElementById('password').value;
+        let data = {"username":user,"password":pass};
+
+        xhr.open('POST','/api/user');
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState == 4 && xhr.status == 200){
+                alert(JSON.parse(xhr.responseText).message);
+            }
+        };
+        xhr.setRequestHeader("Content-Type",'application/json;charset=utf-8');
+        xhr.send(JSON.stringify(data));
+    }
+</script>
+</html>

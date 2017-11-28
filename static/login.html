@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+用户登陆测试。输入用户名密码，ajxa用get发送Authorization到/api/token并保存token。
+<form>
+    <input type="text" name="username" id="username">
+    <input type="password" name="password" id="password">
+
+</form>
+<button onclick="new_user()">登陆</button>
+</body>
+<script>
+    function new_user() {
+        let xhr=null;
+        if(window.XMLHttpRequest){
+            xhr=new XMLHttpRequest();
+        }else{
+            xhr=new ActiveXObject("Microft.XMLHttp");
+        }
+        let user = document.getElementById('username').value;
+        let pass = document.getElementById('password').value;
+
+        xhr.open('GET','/api/token');
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState == 4){
+                if(xhr.status ==200) {
+                    document.cookie = "token="+JSON.parse(xhr.responseText).token+';path=/';
+                    window.location.href = "/";
+                }else{
+                    alert('用户名密码不符合！')
+                }
+            }
+        };
+        xhr.setRequestHeader("Authorization","Basic "+window.btoa(user+":"+pass));
+        xhr.send();
+    }
+</script>
+</html>
